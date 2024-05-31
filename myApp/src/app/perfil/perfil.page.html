@@ -1,13 +1,54 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>perfil</ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">perfil</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <div class= "ion-text-center">
+      <ion-card>
+      <br/>
+        <div>
+          <h1>Bienvenido!</h1>
+          <div>
+          <h4>usuario:</h4>
+          <ion-item>
+            <ion-label>Usuario: {{data.usuario}}</ion-label>
+          </ion-item>
+        </div>
+          <ion-title size="large">Información adicional</ion-title>
+        </div>
+        
+        <ion-card-content>
+          <ion-item>
+            <ion-input label="Nombre" [(ngModel)]="nombre" placeholder="Enter name"></ion-input>
+          </ion-item>
+          <br/>
+          <ion-item>
+            <ion-input label="Apellido" [(ngModel)]="apellido" placeholder="Enter lastname"></ion-input>
+          </ion-item>
+            <ion-list>
+              <ion-item>
+                <ion-select label="Nivel Educación" [(ngModel)]="opcion" aria-label="Fruit" interface="popover" placeholder="Select Nivel">
+                  <ion-select-option value="apples">Educación básica</ion-select-option>
+                  <ion-select-option value="oranges">Educación Media</ion-select-option>
+                  <ion-select-option value="bananas">Educación Superior</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
+          <ion-item>
+            <ion-input type="date" label="Fecha de nacimiento" [(ngModel)]="fecha"  placeholder="Enter lastname"></ion-input>
+            <ion-icon name="calendar-sharp"></ion-icon>
+          </ion-item>
+
+        <div>
+         <br/>
+          <ion-button color="secondary" (click)="limpiar()">Limpiar</ion-button>
+          <ion-button color="secondary">Mostrar</ion-button>
+         </div>
+        </ion-card-content>
+      </ion-card>
+  </div>
 </ion-content>
+
+  <ion-footer>
+  <ion-toolbar>
+    <ion-title> App desarrollado por Dennisse Reveco </ion-title>
+  </ion-toolbar>
+  </ion-footer>
