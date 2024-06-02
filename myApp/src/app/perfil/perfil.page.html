@@ -7,28 +7,33 @@
         <div>
           <h1>Bienvenido!</h1>
           <div>
-          <h4>usuario:</h4>
+          <ion-icon name="person-outline" size="large"></ion-icon>
           <ion-item>
-            <ion-label>Usuario: {{data.usuario}}</ion-label>
+            <h4>Usuario: {{data.usuario}}</h4>
           </ion-item>
+          <br>
         </div>
           <ion-title size="large">Información adicional</ion-title>
         </div>
         
         <ion-card-content>
           <ion-item>
-            <ion-input label="Nombre" [(ngModel)]="nombre" placeholder="Enter name"></ion-input>
+            <ion-input  labelPlacement="floating" [(ngModel)]="nombre" placeholder="Enter name" required>
+              <div slot="label">Nombre <ion-text color="danger">(Required)</ion-text></div>
+            </ion-input>
           </ion-item>
           <br/>
           <ion-item>
-            <ion-input label="Apellido" [(ngModel)]="apellido" placeholder="Enter lastname"></ion-input>
+            <ion-input  labelPlacement="floating" [(ngModel)]="apellido" placeholder="Enter lastname" required>
+              <div slot="label">Apellido <ion-text color="danger">(Required)</ion-text></div>
+            </ion-input>
           </ion-item>
             <ion-list>
               <ion-item>
-                <ion-select label="Nivel Educación" [(ngModel)]="opcion" aria-label="Fruit" interface="popover" placeholder="Select Nivel">
-                  <ion-select-option value="apples">Educación básica</ion-select-option>
-                  <ion-select-option value="oranges">Educación Media</ion-select-option>
-                  <ion-select-option value="bananas">Educación Superior</ion-select-option>
+                <ion-select label="Nivel Educación" [(ngModel)]="opcion" aria-label="opcion" interface="popover" placeholder="Select Nivel">
+                  <ion-select-option value="ducación básica">Educación básica</ion-select-option>
+                  <ion-select-option value="Educación Media">Educación Media</ion-select-option>
+                  <ion-select-option value="Educación Superior">Educación Superior</ion-select-option>
                 </ion-select>
               </ion-item>
             </ion-list>
@@ -40,7 +45,8 @@
         <div>
          <br/>
           <ion-button color="secondary" (click)="limpiar()">Limpiar</ion-button>
-          <ion-button color="secondary">Mostrar</ion-button>
+          <ion-button color="secondary" (click)="mostrarDatos()">Mostrar</ion-button>
+          <ion-button color="secondary" (click)="enviarDatosAHome()">Guardar</ion-button>
          </div>
         </ion-card-content>
       </ion-card>
@@ -49,6 +55,7 @@
 
   <ion-footer>
   <ion-toolbar>
-    <ion-title> App desarrollado por Dennisse Reveco </ion-title>
+    <h6> App desarrollado por Dennisse Reveco </h6>
   </ion-toolbar>
+
   </ion-footer>

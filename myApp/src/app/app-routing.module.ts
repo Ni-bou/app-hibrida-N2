@@ -17,6 +17,7 @@ const routes: Routes = [
     loadChildren: () => import('./menu/menu.module').then( m => m.MenuPageModule)
     
   },
+  /* 
   {
     path: 'home',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
@@ -24,7 +25,7 @@ const routes: Routes = [
   {
     path: 'perfil',
     loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
-  },
+  },**/
 ];
 
 @NgModule({

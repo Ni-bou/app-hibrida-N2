@@ -32,7 +32,7 @@ user={
         user: this.user
       }
     };
-    this.router.navigate(['/perfil'], navigationExtras);
+    this.router.navigate(['/menu'], navigationExtras);
   }
 
   async mostrarAlerta(titulo: string, mensaje: string) {

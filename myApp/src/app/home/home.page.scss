@@ -15,7 +15,7 @@
 
 #container p {
   font-size: 16px;
-  line-height: 22px;
+
 
   color: #8c8c8c;
 
@@ -24,4 +24,11 @@
 
 #container a {
   text-decoration: none;
+}
+ion-content::part(background) {
+  background: #e8e3f1;
+}
+
+ion-content::part(scroll) {
+  color: #fff;
 }
