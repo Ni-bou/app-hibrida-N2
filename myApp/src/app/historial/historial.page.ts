@@ -11,8 +11,6 @@ export class HistorialPage implements OnInit {
 
   
   data: any; //esta es una variable "any" es que permite cualquier valor
-
-
   user={
     usuario: "",
     nCuenta:0,
@@ -21,19 +19,19 @@ export class HistorialPage implements OnInit {
     apellido:"",
     fecha:"",
   }
-  historial: any;
+ 
 
   constructor(private activerouter: ActivatedRoute, private router: Router) {
-    console.log("entra al home");
+    console.log("entro al historial");
     //se llama a la ruta activa y se obtiene sus parametrosd mediante una subscripcion
     this.activerouter.queryParams.subscribe(params => { //utilizamos lambda
       const navigation = this.router.getCurrentNavigation();
       console.log("obtiene la navegacion"+ navigation);
       if (navigation && navigation.extras &&  navigation.extras.state) {
-        this.data = navigation.extras.state['historial'];
-        console.log("tiene un usuario en el home");
+        this.data = navigation.extras.state['user'];
+        console.log("tiene un usuario en el historial");
       }else{this.router.navigate(["/login"])}//si no tiene extra la navegacion actual navegar al login
-      console.log("salio del home");
+      console.log("salio del HISTORIAL");
     })
     
   }

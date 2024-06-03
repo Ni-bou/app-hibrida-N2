@@ -12,7 +12,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 export class HomePage {
 
 
-  message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
+  message = 'This modal example ';
   name = "";
   monto=0;
 
@@ -42,16 +42,7 @@ export class HomePage {
     
   }
 
-  ngOnInit() {
-    // Verificar la ruta actual y navegar en consecuencia
-    if (this.router.url.includes('/menu/home')) {
-      this.navigateToHome();
-    } else if (this.router.url.includes('/menu/perfil')) {
-      this.navigateToPerfil();
-    } else if (this.router.url.includes('/menu/historial')) {
-      this.navigateToHistorial();
-    }
-  }
+ 
   cancel() {
     this.modalController.dismiss(null, 'cancel');
   }
@@ -76,64 +67,42 @@ export class HomePage {
 
   openModalDepositarme() {
     // Verificar si el monto es un número válido
-  if ( this.monto <= 0) {
-    console.log("Monto inválido");
-    return;
-  }else{
     this.depositarme();
-    console.log("se deposito");
-    
-  }
+    console.log("se metido al metodo depositar");
 }
 
   depositarme(){
-  this.data.saldo += this.monto ;
-  console.log("va a enviar el nuevo saldo");
-  console.log(this.data.saldo);
-  this.modalController.dismiss(this.monto, 'confirm');
-  let navigationExtras: NavigationExtras = {
-    state: {
-      user: this.data
+    if ( this.monto <= 0) {
+      console.log("Monto inválido");
+      return;
+    }else{
+      this.data.saldo += this.monto ;
+      console.log("va a enviar el nuevo saldo");
+      console.log(this.data.saldo);
+      this.modalController.dismiss(this.monto, 'confirm');
+      let navigationExtras: NavigationExtras = {
+        state: {
+          user: {
+            usuario: this.data.usuario,
+            nCuenta: this.data.nCuenta,
+            saldo: this.data.saldo,
+            nombre: this.data.nombre,
+            apellido: this.data.apellido,
+            opcion: this.data.opcion,
+            fecha: this.data.fecha
+          
+          }
+        }
+    };
+    this.router.navigate(['/menu/home',], navigationExtras);
+    this.monto=0;
+    this.router.navigate(['/menu/historial'], navigationExtras);
     }
-  };
-  this.router.navigate(['/menu/home'], navigationExtras);
   }
-
-
 
   openModalDepositar() {
    
   }
-  navigateToHome() {
-    let navigationExtras: NavigationExtras = {
-      state: {
-        user: this.data
-      }
-    };
-    this.router.navigate(['/menu/home'], navigationExtras);
-    console.log("envia datos a la visual home");
-  }
 
-  navigateToPerfil() {
-    console.log("entro a navigateToPerfil()");
-    let navigationExtras: NavigationExtras = {
-      state: {
-        user: this.data
-      }
-    };
-    this.router.navigate(['/menu/perfil'], navigationExtras);
-    console.log("envia datos a la visual perfil");
-  }
-
-  navigateToHistorial() {
-    console.log("entro a navigateToPerfil()");
-    let navigationExtras: NavigationExtras = {
-      state: {
-        user: this.data
-      }
-    };
-    this.router.navigate(['/menu/historial'], navigationExtras);
-    console.log("envia datos a la visual historial");
-  }
   
 }
