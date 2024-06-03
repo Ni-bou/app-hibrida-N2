@@ -18,6 +18,10 @@ const routes: Routes = [
         loadChildren: () => import('../perfil/perfil.module').then( m => m.PerfilPageModule)
       },
       {
+        path: 'historial',
+        loadChildren: () => import('../historial/historial.module').then( m => m.HistorialPageModule)
+      },
+      {
         path: '',
         redirectTo: 'home',                  
         pathMatch: 'full'

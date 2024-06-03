@@ -1,37 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute,Router,NavigationExtras } from '@angular/router';
+
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.page.html',
-  styleUrls: ['./menu.page.scss'],
+  selector: 'app-historial',
+  templateUrl: './historial.page.html',
+  styleUrls: ['./historial.page.scss'],
 })
-export class MenuPage implements OnInit {
-  data: any;
-  user = {
-    usuario: "",
-    password: ""
-  };
+export class HistorialPage implements OnInit {
 
-  nombre: string = '';
-  apellido: string = '';
-  opcion: string = '';
-  fecha: string = '';
+  
+  data: any; //esta es una variable "any" es que permite cualquier valor
+
+
+  user={
+    usuario: "",
+    nCuenta:0,
+    saldo:0,
+    nombre:"",
+    apellido:"",
+    fecha:"",
+  }
+  historial: any;
 
   constructor(private activerouter: ActivatedRoute, private router: Router) {
-    console.log("entra al menu");
-    // Se llama a la ruta activa y se obtiene sus parámetros mediante una suscripción
-    this.activerouter.queryParams.subscribe(params => {
+    console.log("entra al home");
+    //se llama a la ruta activa y se obtiene sus parametrosd mediante una subscripcion
+    this.activerouter.queryParams.subscribe(params => { //utilizamos lambda
       const navigation = this.router.getCurrentNavigation();
-      if (navigation && navigation.extras && navigation.extras.state) {
-        this.data = navigation.extras.state['user'];
-        console.log("entro al if tomando al usuario");
-      } else {
-        // Navegar a login si no hay datos del usuario
-        this.router.navigate(["/login"]);
-      }
-    });
+      console.log("obtiene la navegacion"+ navigation);
+      if (navigation && navigation.extras &&  navigation.extras.state) {
+        this.data = navigation.extras.state['historial'];
+        console.log("tiene un usuario en el home");
+      }else{this.router.navigate(["/login"])}//si no tiene extra la navegacion actual navegar al login
+      console.log("salio del home");
+    })
+    
   }
+
 
   ngOnInit() {
     // Verificar la ruta actual y navegar en consecuencia
@@ -79,7 +85,12 @@ export class MenuPage implements OnInit {
   Salir(){
     console.log("Salir del programa");
     this.data = null;
-    this.user = { usuario: "", password: "" };
+    this.user = { usuario: "",nCuenta:0,
+    saldo:0,
+    nombre:"",
+    apellido:"",
+    fecha:""}
     this.router.navigate(['/login']);
   }
+
 }

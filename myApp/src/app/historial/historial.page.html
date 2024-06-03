@@ -1,0 +1,49 @@
+<br>
+<br>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <br>
+  <div class= "ion-text-center">
+      <ion-card>
+      <br/>
+        <div>
+          <h1>Bienvenido! a tu historial de movimientos</h1>
+          <div>
+          <ion-item >
+          <!--  <ion-label >Usuario: {{data.usuario}} </ion-label>-->
+          </ion-item>
+          <br>
+          <!--
+            <div *ngIf="data.nCuenta">Numero Cuenta: {{ data.nCuenta }}</div>
+            <div *ngIf="data.nombre">Nombre: {{ data.nombre }}</div>
+            <div *ngIf="data.apellido">Apellido: {{ data.apellido }}</div>-->
+            <br>
+          </div>
+        </div>
+      </ion-card>
+        
+      <ion-card>
+      <mat-list>
+        <mat-list-item *ngIf="data.nCuenta">
+          <span matListItemTitle>Deposito</span>
+          <span matListItemLine>{{historial.saldo}} {{historial.nCuenta}}</span>
+        </mat-list-item>
+        <mat-list-item *ngIf="data.nCuenta">
+          <span matListItemTitle>Deposito</span>
+          <span matListItemLine>{{historial.saldo}} {{historial.nCuenta}}</span>
+        </mat-list-item>
+        <mat-list-item *ngIf="data.nCuenta">
+          <span matListItemTitle>Deposito</span>
+          <span matListItemLine>{{historial.saldo}} {{historial.nCuenta}}</span>
+        </mat-list-item>
+      </mat-list>
+      
+      </ion-card>
+  </div>
+</ion-content>
+
+  <ion-footer>
+  <ion-toolbar>
+    <h6> App desarrollado por Dennisse Reveco </h6>
+  </ion-toolbar>
+
+  </ion-footer>

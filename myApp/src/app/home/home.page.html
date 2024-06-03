@@ -8,20 +8,103 @@
         <div>
           <h1>Bienvenido!</h1>
           <div>
-          <ion-item>
-            <ion-label>Usuario: {{data.usuario}}</ion-label>
+          <ion-item >
+            <ion-label >Usuario: {{data.usuario}} </ion-label>
           </ion-item>
           <br>
+            <div *ngIf="data.nCuenta">Numero Cuenta: {{ data.nCuenta }}</div>
             <div *ngIf="data.nombre">Nombre: {{ data.nombre }}</div>
             <div *ngIf="data.apellido">Apellido: {{ data.apellido }}</div>
             <div *ngIf="data.fecha">F.nacimiento: {{ data.fecha }}</div>
+            <br>
           </div>
         </div>
+        </ion-card>
+        <div *ngIf="data.nCuenta">  
+          <ion-card-content class="saldo-card">
+            <ion-item >
+              <ion-label class= "ion-text-center">Saldo Actual</ion-label>
+              <ion-icon slot="start" name="cash-outline"></ion-icon>
+            </ion-item>
+            <ion-item >
+              <ion-label class= "ion-text-center">${{data.saldo}}</ion-label>
+            </ion-item>
+          </ion-card-content>
+          <ion-card-content class="saldo-card">
+            <ion-item >
+              <ion-label class= "ion-text-center">Elige tu opción</ion-label>
+              <ion-icon slot="start" name="wallet-outline"></ion-icon>
+            </ion-item>
+          </ion-card-content>
+        <ion-card>
       
-        <ion-card-content>
-
-        </ion-card-content>
       </ion-card>
+            <ion-item >
+              <ion-content class="ion-center">
+              <ion-button id="open-modal-depositar" (click)="openModalDepositarme()">Depositar a terceros</ion-button>
+              <ion-modal trigger="open-modal-depositar" (willDismiss)="onWillDismissDepositarme($event)">
+                <ng-template>
+                  <ion-header>
+                    <ion-toolbar>
+                      <ion-buttons slot="start">
+                        <ion-button (click)="cancel()">Cancel</ion-button>
+                      </ion-buttons>
+                      <ion-title>Depositar a terceros</ion-title>
+                      <ion-buttons slot="end">
+                        <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+                      </ion-buttons>
+                    </ion-toolbar>
+                  </ion-header>
+                  <ion-content class="ion-padding">
+                    <ion-item>
+                      <ion-input
+                        label="Enter your name"
+                        labelPlacement="stacked"
+                        type="number"
+                        placeholder="Your name"
+                        [(ngModel)]="name"
+                      ></ion-input>
+                    </ion-item>
+                  </ion-content>
+                </ng-template>
+              </ion-modal>
+            </ion-content>
+        
+              <ion-content class="ion-center">
+              <ion-button id="open-modal-depositarme" (click)="openModalDepositarme()">Depositar a mi cueta</ion-button>
+              <ion-modal trigger="open-modal-depositarme" (willDismiss)="onWillDismissDepositarme($event)">
+                <ng-template>
+                  <ion-header>
+                    <ion-toolbar>
+                      <ion-buttons slot="start">
+                        <ion-button (click)="cancel()">Cancelar</ion-button>
+                      </ion-buttons>
+                      <ion-title>Depositar a mi cuenta</ion-title>
+                      <ion-buttons slot="end">
+                        <ion-button (click)="depositarme()" [strong]="true">Confirmar</ion-button>
+                      </ion-buttons>
+                    </ion-toolbar>
+                  </ion-header>
+                  <ion-content class="ion-padding">
+                    <ion-item>
+                      <ion-input
+                        label="Enter monto"
+                        labelPlacement="stacked"
+                        type="number"
+                        placeholder="Monto"
+                        [(ngModel)]="monto"
+                      ></ion-input>
+                    </ion-item>
+                  </ion-content>
+                </ng-template>
+              </ion-modal>
+            </ion-content>
+            </ion-item>
+
+
+          
+          </div>
+        
   </div>
 </ion-content>
 

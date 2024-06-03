@@ -11,6 +11,8 @@ export class PerfilPage implements OnInit {
   data: any; //esta es una variable "any" es que permite cualquier valor
 
   usuario: string='';
+  nCuenta: number= 0;
+  saldo: number= 0;
   nombre: string='';
   apellido: string='';
   opcion: string='';
@@ -38,6 +40,8 @@ export class PerfilPage implements OnInit {
   
   limpiar(){
     this.usuario='';
+    this.nCuenta= 0;
+    this.saldo=100;
     this.nombre='';
     this.apellido='';
     this.opcion='';
@@ -55,22 +59,24 @@ export class PerfilPage implements OnInit {
   }
 
   mostrarDatos() {
-    if (!this.nombre.trim() || !this.apellido.trim()) {
+    if (!this.nombre.trim() || !this.apellido.trim()|| this.nCuenta <= 0 || isNaN(this.nCuenta)) {
       this.mostrarAlerta("Error", "Por favor completa todos los campos");
     } else {
-      const mensaje = `Nombre: ${this.nombre}\n Apellido: ${this.apellido}\n Opción: ${this.opcion}\n Fecha: ${this.fecha}`;
+      const mensaje = `Nombre: ${this.nombre}\n Apellido: ${this.apellido}\n Opción: ${this.opcion}\n Fecha: ${this.fecha}\n N Cuenta: ${this.nCuenta}`;
       this.mostrarAlerta("Ingresados", mensaje);
     }
   }
 
   enviarDatosAHome() {
-    if (!this.nombre.trim() || !this.apellido.trim()) {
+    if (!this.nombre.trim() || !this.apellido.trim() ||this.nCuenta <= 0 || isNaN(this.nCuenta)) {
       this.mostrarAlerta("Error", "Por favor completa todos los campos obligatorios");
     } else {
       let navigationExtras: NavigationExtras = {
         state: {
           user: {
             usuario: this.data.usuario,
+            nCuenta: this.nCuenta,
+            saldo: this.saldo,
             nombre: this.nombre,
             apellido: this.apellido,
             opcion: this.opcion,
