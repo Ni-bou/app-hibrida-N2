@@ -6,10 +6,18 @@
       <ion-card>
       <br/>
         <div>
+          <ion-img style="width: 9%; display: inline-block;" src="assets/icon/img/bank.jpg"  ></ion-img>
           <h1>Bienvenido!</h1>
+          <!--
+          <ion-card #card style="width: 80px; --width: 160px;">
+            <ion-card-content>Card</ion-card-content>
+          </ion-card>
+          -->
+          <ion-icon name="person-outline" size="large"></ion-icon>
           <div>
           <ion-item >
             <ion-label >Usuario: {{data.usuario}} </ion-label>
+            
           </ion-item>
           <br>
             <div *ngIf="data.nCuenta">Numero Cuenta: {{ data.nCuenta }}</div>

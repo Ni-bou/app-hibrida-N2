@@ -80,7 +80,8 @@ export class PerfilPage implements OnInit {
             nombre: this.nombre,
             apellido: this.apellido,
             opcion: this.opcion,
-            fecha: this.fecha
+            fecha: this.fecha,
+
           }
         }
       };

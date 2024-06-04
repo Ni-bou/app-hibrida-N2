@@ -23,13 +23,13 @@
         
       <ion-card>
       <mat-list>
-        <mat-list-item *ngIf="data.saldo">
+        <mat-list-item *ngIf="userData.saldo">
           <span matListItemTitle>Deposito</span>
-          <span matListItemLine>Monto deposito: {{data.saldo}}   Numero cuenta:{{data.nCuenta}}</span>
+          <span matListItemLine>Monto deposito: {{userData.monto}}   Numero cuenta:{{userData.nCuenta}} </span>
         </mat-list-item>
        <!-- <mat-list-item *ngIf="data.nCuenta">
           <span matListItemTitle>Deposito</span>
-          <span matListItemLine>{{historial.saldo}} {{data.nCuenta}}</span>
+          <span matListItemLine>{{historial.saldo}} {{data.nCuenta}}</spa
         </mat-list-item>
         <mat-list-item *ngIf="data.saldo">
           <span matListItemTitle>Deposito</span>
