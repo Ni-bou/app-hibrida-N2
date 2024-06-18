@@ -22,6 +22,18 @@ const routes: Routes = [
         loadChildren: () => import('../historial/historial.module').then( m => m.HistorialPageModule)
       },
       {
+        path: 'map',
+        loadChildren: () => import('../map/map.module').then( m => m.MapPageModule)
+      },
+      {
+        path: 'api-economia',
+        loadChildren: () => import('../api-economia/api-economia.module').then( m => m.ApiEconomiaPageModule)
+      },
+      {
+        path: 'camera',
+        loadChildren: () => import('../camera/camera.module').then( m => m.CameraPageModule)
+      },
+      {
         path: '',
         redirectTo: 'home',                  
         pathMatch: 'full'

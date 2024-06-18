@@ -16,26 +16,27 @@
           <ion-icon name="person-outline" size="large"></ion-icon>
           <div>
           <ion-item >
-            <ion-label >Usuario: {{data.usuario}} </ion-label>
+            <ion-label >Usuario: {{usuario}} </ion-label>
             
           </ion-item>
           <br>
-            <div *ngIf="data.nCuenta">Numero Cuenta: {{ data.nCuenta }}</div>
-            <div *ngIf="data.nombre">Nombre: {{ data.nombre }}</div>
-            <div *ngIf="data.apellido">Apellido: {{ data.apellido }}</div>
-            <div *ngIf="data.fecha">F.nacimiento: {{ data.fecha }}</div>
+            <div *ngIf="nCuenta">Numero Cuenta: {{ nCuenta }}</div>
+            <div *ngIf="nombre">Nombre: {{ nombre }}</div>
+            <div *ngIf="apellido">Apellido: {{ apellido }}</div>
+            <div *ngIf="fecha">F.nacimiento: {{ fecha }}</div>
+            <div *ngIf="id">id: {{ id }}</div>
             <br>
           </div>
         </div>
         </ion-card>
-        <div *ngIf="data.nCuenta">  
+        <div *ngIf="nombre">  
           <ion-card-content class="saldo-card">
             <ion-item >
               <ion-label class= "ion-text-center">Saldo Actual</ion-label>
               <ion-icon slot="start" name="cash-outline"></ion-icon>
             </ion-item>
             <ion-item >
-              <ion-label class= "ion-text-center">${{data.saldo}}</ion-label>
+              <ion-label class= "ion-text-center">${{saldo}}</ion-label>
             </ion-item>
           </ion-card-content>
           <ion-card-content class="saldo-card">

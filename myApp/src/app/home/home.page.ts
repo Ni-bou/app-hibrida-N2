@@ -1,63 +1,66 @@
-import { ActivatedRoute,Router,NavigationExtras } from '@angular/router';
-import { IonModal, ModalController } from '@ionic/angular';
-import { SharedService } from '../shared.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute,Router } from '@angular/router';
+import { ModalController, AlertController  } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import type { Animation } from '@ionic/angular';
-import { AnimationController, IonCard, IonCardContent } from '@ionic/angular';
+import { DbserviceService } from '../dbservice.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
-  
-
-  animation!: Animation;
-  userData: any;
+export class HomePage implements OnInit {
+  //data: any;
+ 
   message = 'This modal example ';
   name = "";
-  monto=0;
+  monto: number = 0;
+  
+  usuario: any = '';
+  password: any = '';
+  nCuenta: any = '';
+  saldo: number = 0;
+  nombre: any = '';
+  apellido: any = '';
+  fecha: any = '';
+  opcion: any = '';
+  id: any= '';
 
 
-  data: any; //esta es una variable "any" es que permite cualquier valor
-  user={
-    usuario: "",
-    nCuenta:0,
-    saldo:0,
-    nombre:"",
-    apellido:"",
-    fecha:"",
-    monto:0,
-  }
-
-
-  constructor(private activerouter: ActivatedRoute, private router: Router,  private modalController: ModalController,private sharedService: SharedService,private animationCtrl: AnimationController) {
-    console.log("entra al home");
-    //se llama a la ruta activa y se obtiene sus parametrosd mediante una subscripcion
-    this.data = this.sharedService.getUserData();
-        console.log("tiene un usuario en el home"+this.data);
-    this.activerouter.queryParams.subscribe(params => { //utilizamos lambda
-      const navigation = this.router.getCurrentNavigation();
-      console.log("obtiene la navegacion"+ this.data);
-      if (navigation && navigation.extras &&  navigation.extras.state) {
-        this.data = navigation.extras.state['user'];
-        console.log("tiene un usuario en el home");
-        this.mandarDatosHistorial();
-      }else{this.router.navigate(["/login"])}//si no tiene extra la navegacion actual navegar al login
-      console.log("salio del home");
-    })
-    
+  constructor( private activerouter: ActivatedRoute,private router: Router,  private modalController: ModalController,private dbService: DbserviceService,private alertController: AlertController) {
+    // Asignamos valores
+    this.usuario = localStorage.getItem('usuario');
+    this.password = localStorage.getItem('password');
+    this.nCuenta = localStorage.getItem('nombre');
+    this.nombre = localStorage.getItem('nombre');
+    this.apellido = localStorage.getItem('apellido');
+    this.opcion = localStorage.getItem('opcion');
+    this.fecha = localStorage.getItem('fecha');
+    this.id = localStorage.getItem('id');
   }
 
   ngOnInit() {
-    this.data = this.sharedService.getUserData();
-    if (this.data) {
-      console.log('User Data en home:', this.data);
-      this.sharedService.setUserData(this.data);
+    
+    if (!this.usuario || !this.password) { 
+      this.router.navigate(["/login"]);
+    } else {
+      this.saldo = Number(localStorage.getItem('saldo')) || 0; // para convertir a número
+      
+      console.log("Datos recibidos en el home desde perfil:", 
+        this.usuario, this.nCuenta, this.saldo, this.nombre, this.apellido, this.opcion, this.fecha);
     }
   }
+
+  async mostrarAlerta(titulo: string, mensaje: string) {
+    const alert = await this.alertController.create({
+      header: titulo,
+      message: mensaje,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
   cancel() {
     this.modalController.dismiss(null, 'cancel');
   }
@@ -69,75 +72,55 @@ export class HomePage {
   onWillDismissDepositarme(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<number>>;
     if (ev.detail.role === 'confirm') {
-      this.message = `Hello, ${ev.detail.data}!`;
+     this.message = `Hello, ${ev.detail.data}!`;
     }
   }
 
   onWillDismissDepositar(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<number>>;
     if (ev.detail.role === 'confirm') {
-      this.message = `Hello, ${ev.detail.data}!`;
+     this.message = `Hello, ${ev.detail.data}!`;
     }
   }
 
   openModalDepositarme() {
-    // Verificar si el monto es un número válido
+    //Verificar si el monto es un número válido
     this.depositarme();
     console.log("se metido al metodo depositar");
 }
 
-  depositarme(){
-    if ( this.monto <= 0) {
+  depositarme() {
+    if (this.monto <= 0) {
       console.log("Monto inválido");
       return;
-    }else{
-      this.data.saldo += this.monto ;
+    } else {
+      this.saldo += this.monto;
       console.log("va a enviar el nuevo saldo");
-      console.log(this.data.saldo);
+      console.log(this.saldo);
       this.modalController.dismiss(this.monto, 'confirm');
-      let navigationExtras: NavigationExtras = {
-        state: {
-          user: {
-            usuario: this.data.usuario,
-            nCuenta: this.data.nCuenta,
-            saldo: this.data.saldo,
-            nombre: this.data.nombre,
-            apellido: this.data.apellido,
-            opcion: this.data.opcion,
-            fecha: this.data.fecha,
-            monto: this.monto,
-          
-          }
-        }
-    };
-    this.sharedService.setUserData(this.data);
-    console.log("this.monto",this.monto);
-    this.router.navigate(['/menu/home',], navigationExtras);
+      this.actualizarLocalStorage();
+      console.log("Datos actualizados:", this.usuario, this.nCuenta, this.saldo, this.nombre, this.apellido, this.opcion, this.fecha, this.monto);
+      this.router.navigate(['/menu/home']);
     }
-    this.monto=0;
+  }
+  actualizarLocalStorage() {
+    localStorage.setItem('usuario', this.usuario);
+    localStorage.setItem('password', this.password);
+    localStorage.setItem('nCuenta', this.nCuenta);
+    localStorage.setItem('saldo', this.saldo.toString());
+    localStorage.setItem('nombre', this.nombre);
+    localStorage.setItem('apellido', this.apellido);
+    localStorage.setItem('opcion', this.opcion);
+    localStorage.setItem('fecha', this.fecha);
+    localStorage.setItem('monto', this.monto.toString());
   }
 
   openModalDepositar() {
    
   }
   mandarDatosHistorial() {
-    this.sharedService.setUserData(this.data);
+   
   }
 
-  //animacion:
- /*
-  ngAfterViewInit() {
-    this.animation = this.animationCtrl
-      .create()
-      .addElement(this.card.nativeElement)
-      .duration(3000)
-      .iterations(Infinity)
-      .keyframes([
-        { offset: 0, width: '80px' },
-        { offset: 0.72, width: 'var(--width)' },
-        { offset: 1, width: '240px' },
-      ]);
-      this.animation.play();
-  }*/
   
 }

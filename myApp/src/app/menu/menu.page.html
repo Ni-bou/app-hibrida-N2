@@ -23,6 +23,24 @@
             <ion-icon slot="start" name="save-outline"></ion-icon>
           </ion-item>
         </ion-menu-toggle>  
+        <!--api-->
+        <ion-menu-toggle>
+          <ion-item (click)="navigateToApiEconomia()">Economia
+            <ion-icon slot="start" name="wallet-outline"></ion-icon>
+          </ion-item>
+        </ion-menu-toggle>  
+        <!--camera-->
+        <ion-menu-toggle>
+          <ion-item (click)="navigateToCamera()">Cámara
+            <ion-icon slot="start" name="camera-outline"></ion-icon>
+          </ion-item>
+        </ion-menu-toggle>  
+        <!--mapa-->
+        <ion-menu-toggle>
+          <ion-item (click)="navigateToMap()">Ubicación
+            <ion-icon slot="start" name="map-outline"></ion-icon>
+          </ion-item>
+        </ion-menu-toggle>  
          <ion-menu-toggle><!--esto es para que al tocar se cierre nuevamnete el menu-->
           <ion-item (click)="Salir()">Exit
             <ion-icon slot="start" name="exit-outline"></ion-icon>
