@@ -24,7 +24,7 @@ export class HomePage implements OnInit {
   apellido: any = '';
   fecha: any = '';
   opcion: any = '';
-  id: any= '';
+  idUsuario: any='';
 
 
   constructor( private activerouter: ActivatedRoute,private router: Router,  private modalController: ModalController,private dbService: DbserviceService,private alertController: AlertController) {
@@ -36,19 +36,21 @@ export class HomePage implements OnInit {
     this.apellido = localStorage.getItem('apellido');
     this.opcion = localStorage.getItem('opcion');
     this.fecha = localStorage.getItem('fecha');
-    this.id = localStorage.getItem('id');
-  }
+    
+    this.idUsuario =Number(localStorage.getItem('idUsuario')) ;
+    this.saldo = Number(localStorage.getItem('saldo')) || 0; // para convertir a número
+    try{
+      const data_user = this.dbService.datosUsuario(this.idUsuario);
+      if(data_user){
+        this.mostrarAlerta('validando resivir dataUser', 'datos '+data_user+' id: '+this.idUsuario);
+        }
+      } catch (error:any) {
+        this.mostrarAlerta('Error', 'Error en traer o el id o data_user'+error.message);
+        console.error(error);
+      }
+    }
 
   ngOnInit() {
-    
-    if (!this.usuario || !this.password) { 
-      this.router.navigate(["/login"]);
-    } else {
-      this.saldo = Number(localStorage.getItem('saldo')) || 0; // para convertir a número
-      
-      console.log("Datos recibidos en el home desde perfil:", 
-        this.usuario, this.nCuenta, this.saldo, this.nombre, this.apellido, this.opcion, this.fecha);
-    }
   }
 
   async mostrarAlerta(titulo: string, mensaje: string) {
@@ -113,6 +115,7 @@ export class HomePage implements OnInit {
     localStorage.setItem('opcion', this.opcion);
     localStorage.setItem('fecha', this.fecha);
     localStorage.setItem('monto', this.monto.toString());
+    localStorage.setItem('idUsuario', this.idUsuario.toString());
   }
 
   openModalDepositar() {

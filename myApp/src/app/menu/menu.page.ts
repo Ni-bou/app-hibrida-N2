@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-menu',
@@ -17,7 +18,7 @@ export class MenuPage {
   fecha: any='';
  
 
-  constructor(private activerouter: ActivatedRoute, private router: Router) {
+  constructor(private activerouter: ActivatedRoute, private router: Router, private alertController:AlertController) {
     
     //recuperamos los valores asignados en login y los asignamos
     this.usuario = localStorage.getItem('usuario');
@@ -31,30 +32,14 @@ export class MenuPage {
 
   }
 
-  ngOnInit() {
-    // Verificar la ruta actual y navegar en consecuencia
-    if (this.router.url.includes('/menu/home')) {
-      this.navigateToHome();
-    } else if (this.router.url.includes('/menu/perfil')) {
-      this.navigateToPerfil();
-    } else if (this.router.url.includes('/menu/historial')) {
-      this.navigateToHistorial();
-    } else if (this.router.url.includes('/menu/map')) {
-      this.navigateToMap();
-    } else if (this.router.url.includes('/menu/camera')) {
-      this.navigateToCamera;
-    } else if (this.router.url.includes('/menu/api-economia')) {
-      this.navigateToApiEconomia();
-    }  else {
-      this.router.navigate(['/menu/home']); // Navegar a /menu/home si no coincide con ninguna ruta específica
-    }
-  }
+  
 
   //redirecciona según el nombre de la visual a la que queramos ir
   navigateToHome() {
     
     this.router.navigate(['/menu/home']);
     console.log("envia datos a la visual home");
+    this.mostrarAlerta("viajando", "Viaja informacion de menu al home");
   }
 
   navigateToPerfil() {
@@ -110,4 +95,15 @@ export class MenuPage {
     localStorage.removeItem('monto');
    
   }
+
+    //esta es la ventana del mensaje en caso de error.
+    async mostrarAlerta(titulo: string, mensaje: string) {
+      const alert = await this.alertController.create({
+        header: titulo,
+        message: mensaje,
+        buttons: ['OK']
+      });
+    
+      await alert.present();
+    }
 }

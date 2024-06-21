@@ -126,7 +126,9 @@ export class DbserviceService {
       const res = await this.db.executeSql(`SELECT * FROM usuarios WHERE usuario = ? AND password = ?`, [usuario, password]);
       if (res.rows.length > 0) {//numero de filas que trae de la consulta que coincida, si hay 1 que consida
         this.mostrarAlerta('validarUsuario','cantidad usuario: '+ res.rows.length);
-        return res.rows.item(0); // retorna el primer usuario que coincida
+        this.mostrarAlerta('validarUsuarioMetodo','id:' +res.rows.item(0).id)
+
+        return res.rows.item(0).id; // retorna el primer usuario que coincida y su id
       } else {
         return null; // retorna nulo al no encontrar ningún usuario
       }
@@ -137,6 +139,7 @@ export class DbserviceService {
     }
   }
 
+  
   //método para actualizar valores del usario y la tabla usuarios
   async actualizarUsuario(id: number,usuario: string, password: string, nombre: string, apellido: string, opcion: string, fecha: string, nCuenta: string){
     try {
@@ -192,6 +195,32 @@ export class DbserviceService {
         throw error; // Lanza el error para ser capturado por el componente
       }
   }*/
+
+  // trae los datos del usuario
+  async datosUsuario(id: string) {
+    try {
+      const dataUser = await this.db.executeSql(`SELECT * FROM usuarios WHERE id = ?`, [id]);
+      if (dataUser.rows.length > 0) {//numero de filas que trae de la consulta que coincida, si hay 1 que consida
+        this.mostrarAlerta('validarUsuarioMetodo','id:' 
+          +dataUser.rows.item(0).id
+          +dataUser.rows.item(1).usuario
+          +dataUser.rows.item(3).nombre
+          +dataUser.rows.item(4).apellido
+          +dataUser.rows.item(5).opcion
+          +dataUser.rows.item(6).fecha
+          +dataUser.rows.item(7).nCuenta
+        )
+
+        return dataUser; // retorna el primer usuario que coincida y su id
+      } else {
+        return null; // retorna nulo al no encontrar ningún usuario
+      }
+      
+    } catch (error:any) {
+      await this.mostrarAlerta('Error', 'No se encontró al usuario: ' + error.message);
+      return null;
+    }
+  }
 
   // mostrar mensaje
   async mostrarAlerta(titulo: string, mensaje: string) {

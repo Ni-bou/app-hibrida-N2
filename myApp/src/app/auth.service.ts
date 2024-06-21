@@ -8,8 +8,8 @@ export class AuthService {
 
   constructor() { }
 
-  isLoggedIn(): boolean {
-    return this.loggedInStatus;
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('usuario'); // Verifica si existe el usuario en localStorage
   }
 
   login(): void {

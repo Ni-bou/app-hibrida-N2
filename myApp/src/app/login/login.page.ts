@@ -12,6 +12,7 @@ export class LoginPage implements OnInit {
 
 usuario: any='';
 password: any='';
+idUsuario: any='';
   constructor(private router: Router, private alertController: AlertController,private dbService: DbserviceService) { }//se debe instanciar
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
@@ -31,20 +32,23 @@ password: any='';
     //verificar al usuario en la base de datos
       try {
         console.log('login 1 entrada a la funcion validarUsuario');
-        const user = await this.dbService.validarUsuario(this.usuario, this.password);
-        if (user) {
-          this.mostrarAlerta('Éxito', 'Inicio de sesión exitoso');
+        const user_id = await this.dbService.validarUsuario(this.usuario, this.password);
+        if (user_id) {
+          
           //aquí  guardamos los valores en el localStorage de usuario y passwod
+          this.idUsuario=user_id;
           localStorage.setItem('usuario',this.usuario);
           localStorage.setItem('password',this.password);
+          localStorage.setItem('idUsuario', user_id.toString());
+          this.mostrarAlerta('Éxito', 'Inicio de sesión exitoso'+user_id+this.idUsuario);
           //me falta traer los datos faltantes como nombre y apellido
 
-          this.router.navigate(['/menu/home'],user); // nos manda al menu
+          this.router.navigate(['/menu/home'],user_id); // nos manda al menu
         } else {
           this.mostrarAlerta('Error', 'Usuario o contraseña incorrectos');
         }
-      } catch (error) {
-        this.mostrarAlerta('Error', 'Error al iniciar sesión');
+      } catch (error:any) {
+        this.mostrarAlerta('Error', 'Error al iniciar sesión'+error.message);
         console.error(error);
       }
     }
