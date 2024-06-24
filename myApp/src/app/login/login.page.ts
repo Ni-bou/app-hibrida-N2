@@ -37,7 +37,7 @@ idUsuario: any='';
           localStorage.setItem('usuario',this.usuario);
           localStorage.setItem('password',this.password);
           localStorage.setItem('idUsuario', this.idUsuario.toString());
-          this.mostrarAlerta('Éxito', 'Inicio de sesión exitoso: '+user_id);
+          this.mostrarAlerta('Éxito', 'Inicio de sesión exitoso '+ this.usuario);
           
           try{
             const data_user = await this.dbService.datosUsuario(this.idUsuario);

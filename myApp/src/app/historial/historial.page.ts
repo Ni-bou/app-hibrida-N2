@@ -29,27 +29,10 @@ export class HistorialPage implements OnInit {
     this.opcion= localStorage.getItem('opcion');
     this.fecha= localStorage.getItem('fecha');
     
-    console.log("Datos recibidos en el home desde perfil:", 
-      this.usuario,
-      this.nCuenta,
-      this.saldo,
-      this.nombre,
-      this.apellido,
-      this.opcion,
-      this.fecha
-      );
   }
 
   ngOnInit() {
-    this.usuario = localStorage.getItem('usuario');
-    this.password = localStorage.getItem('password');
-
-    if (!this.usuario || !this.password) { 
-      this.router.navigate(["/login"]);
-    } else {
-      console.log("Datos recibidos en el home:", this.usuario, this.password);
-
-    }
+    
   }
  
 

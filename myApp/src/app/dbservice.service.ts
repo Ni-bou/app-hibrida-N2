@@ -261,6 +261,10 @@ export class DbserviceService {
     }
   }
 
+  async comprobarCuenta(){
+    
+  }
+
   // mostrar mensaje
   async mostrarAlerta(titulo: string, mensaje: string) {
     const alert = await this.toastController.create({

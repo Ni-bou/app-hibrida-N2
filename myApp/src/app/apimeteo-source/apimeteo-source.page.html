@@ -15,12 +15,13 @@
   
     <ion-card *ngFor="let feriado of feriados">
     <ion-card-header>
-      <ion-card-title> {{feriado.nombre}}</ion-card-title>
+      <ion-card-title> {{feriado.title}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       
-      <p><strong>Tipo: </strong>{{feriado.tipo}}</p>
-      <p><strong>Fecha: </strong>{{feriado.fecha}}</p>
+      <p><strong>Fecha: </strong>{{feriado.date}}</p>
+      <p><strong>Tipo: </strong>{{feriado.type}}</p>
+      <p><strong>Extra: </strong>{{feriado.extra}}</p>
       
       <!--<p><strong>Leyes: </strong>{{item.leyes}}</p>-->
     </ion-card-content>

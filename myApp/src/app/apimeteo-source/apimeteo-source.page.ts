@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ModalController, AlertController  } from '@ionic/angular';
-import { AstTransformer } from '@angular/compiler';
+
 
 @Component({
   selector: 'app-apimeteo-source',
@@ -18,20 +18,23 @@ export class APImeteoSourcePage implements OnInit {
   }
 
   fetchFeriados() {
-    this.http.get<any[]>('https://apis.digital.gob.cl/fl/feriados').subscribe(
-      (response: any[]) => {
-        this.feriados = response;
+    this.http.get('https://api.boostr.cl/feriados/en.json').subscribe(
+      (response: any) => {//es una variable de cualquier tipo la cual utilizaremos para traer "data":[] que contiene toda la informacion de la api
+        this.feriados = response.data; //esto hacer que resiva la informacion directamente
+        //luego en el html llamaremos a "let feriado of feriados" para llamar a datos como feriado.title
       },
-      (error) => {
-        this.presentErrorAlert();
-        console.error('Error fetching feriados', error);
+      error => {
+        this.mostrarAlerta('Error','');//arroja error en caso de no poder traer la informacion
       }
     );
   }
-  async presentErrorAlert() {
+
+
+
+  async mostrarAlerta(titulo: string, mensaje: string) {
     const alert = await this.alertController.create({
-      header: 'Error',
-      message: 'Hubo un problema al obtener los feriados.',
+      header: titulo,
+      message: mensaje,
       buttons: ['OK']
     });
 

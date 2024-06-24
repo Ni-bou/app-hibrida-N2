@@ -69,7 +69,7 @@ export class MenuPage {
     this.router.navigate(['/menu/camera']);
 
   }
-  navigateToMeteo() {
+  navigateToFeriados() {
     
     this.router.navigate(['/menu/apimeteo-source']);
 

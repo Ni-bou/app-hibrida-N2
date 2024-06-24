@@ -25,34 +25,21 @@ export class ApiEconomiaPage implements OnInit {
     //cuando la solicitud se cumpla por completo
     //this.mostrarAlerta('API','este trae la api: '+ response);
 
-    console.log('log',response);
     this.economisData= this.transformData(response);
   
   });
   }
-
+  //este método recorre con un for todos los datos que trae el response
   transformData(data: any): any []{
     const result = [];
  
     for(const key in data){
-      console.log('result');
       if (data.hasOwnProperty(key)&& typeof data[key]==='object'){
         result.push(data[key]);
-        
       }
     }
     return result;
   }
 
   
-
-  async mostrarAlerta(titulo: string, mensaje: string) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      message: mensaje,
-      buttons: ['OK']
-    });
-
-    await alert.present();
-  }
 }

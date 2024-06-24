@@ -82,7 +82,6 @@ export class HomePage implements OnInit {
   }
 
   openModalDepositarme() {
-    //Verificar si el monto es un número válido
 
     console.log("se metido al metodo depositar");
 }
@@ -132,25 +131,33 @@ export class HomePage implements OnInit {
   }
 
   async depositaATercero() {
-   if(this.monto < 0 && this.cuenta <0){//que los datos sean ingresados
-    this.mostrarAlerta('Error','Debe ingresar una cuenta y monto valido monto:'+this.monto+'cuenta: '+this.cuenta)
+
+   if(this.monto <= 0 && this.cuenta <=0){//que los datos sean ingresados en las casillas
+    this.mostrarAlerta('Error','Debe ingresar una cuenta y monto valido monto:');
     return null;
 
    }else{
-    //comprobar que el monto a transferir sea mayor que el saldo
-    if(this.monto <= this.saldo){//que el monto sea menor que el saldo
-      this.mostrarAlerta('comprovar',' monto:'+this.monto+'cuenta: '+this.cuenta+'this.nCuenta'+this.nCuenta+'saldo'+this.saldo)
-      
+    //comprobar que el monto a transferir sea menor o igual que el saldo
+    if(this.monto <= this.saldo){
+
+      //this.mostrarAlerta('comprovar',' monto: '+this.monto+' cuenta: '+this.cuenta+' this.nCuenta: '+this.nCuenta+' saldo: '+this.saldo)
       try{
       const comprobar = await this.dbService.getSalgo(this.cuenta);//trae el saldo de la cuenta si encuentra la cuenta encuentra
       if(!comprobar){
-        const queTrae = comprobar.rows.item(0).saldo;
-        this.mostrarAlerta('Error',' no se encontro la cuenta'+ queTrae)
+        this.mostrarAlerta('Error',' no se encontro la cuenta al buscarla'+ comprobar)
         return null;
       }else{
-        const queTrae = comprobar.rows.item(0).saldo;
-        this.mostrarAlerta('Error',' no se encontro la cuenta'+ queTrae)
-        //cuentaUsuario
+        //trae el saldo y suma el monto, luego se llama al metodo cuentaUsuario que actualiza el saldo
+        let saldoActual = parseFloat(comprobar);
+        saldoActual += this.monto;
+        this.saldo -= this.monto;
+        const usuarioResive = await this.dbService.actualizarcuentaUsuario(this.cuenta,saldoActual);
+        if(usuarioResive){
+          this.mostrarAlerta('Exito!',' Deposito realizado exitosamente');
+          this.router.navigate(['/menu/home']);
+        }else{
+          this.mostrarAlerta('Error',' no se encontro la cuenta'+ usuarioResive)
+        }
         return true;
       }
       }catch(error: any) {
@@ -158,6 +165,9 @@ export class HomePage implements OnInit {
           return null;
       }
     
+    }else{
+      this.mostrarAlerta('Error', 'El monto es mayor a tu saldo');
+      return null;
     }
    }
    return false;
