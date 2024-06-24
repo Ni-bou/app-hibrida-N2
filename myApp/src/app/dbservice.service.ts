@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx'; // los plugins de sqlite
 import { ToastController } from '@ionic/angular'; // avisos para la base de datos
 import { BehaviorSubject } from 'rxjs'; // usar la base de datos sin devolver la consulta
+import { ActivatedRoute,Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class DbserviceService {
   public db!: SQLiteObject;
 
   //variable de valor para saldo
-  public saldo: number =0;
+  public idOBt: number =0;
+
 
   // observable
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false); // maneja el estado de la BD y los usuarios
@@ -20,7 +22,7 @@ export class DbserviceService {
   // crear objetos dentro del constructor
   // 1 sqlt
   // 2 toast controller
-  constructor(private sqlite: SQLite, private toastController: ToastController) {
+  constructor(private sqlite: SQLite, private toastController: ToastController, private activerouter: ActivatedRoute,private router: Router) {
     this.initDatabase(); // inicializar la base de datos
   }
 
@@ -33,6 +35,7 @@ export class DbserviceService {
       this.db = db;
       // si no se cae, va a crear las tablas y va a mandar el mensaje
       await this.crearTablaUsuarios();
+      await this.crearTablaCuentaUsuario();
       this.isDBReady.next(true); // muestra true cuando la base de datos está lista
       await this.mostrarAlerta('Felicidades!', 'Base de datos y tabla creadas con éxito');
     } catch (error: any) {
@@ -54,7 +57,7 @@ export class DbserviceService {
               apellido TEXT,
               opcion TEXT,
               fecha TEXT,
-              nCuenta TEXT,
+              nCuenta INTEGER,
               FOREIGN KEY (nCuenta) REFERENCES cuentaUsuario(nCuenta)
             )
           `, [])
@@ -99,7 +102,7 @@ export class DbserviceService {
   
 
   // insertar los datos a la tabla:
-  async insertarUsuario(usuario: string, password: string, nombre: string, apellido: string, opcion: string, fecha: string, nCuenta: string) {
+  async insertarUsuario(usuario: string, password: string, nombre: string, apellido: string, opcion: string, fecha: string, nCuenta: number) {
     try {
       const result = await this.db.executeSql(`INSERT INTO usuarios(usuario, password, nombre, apellido, opcion, fecha, nCuenta) VALUES(?,?,?,?,?,?,?)`, [usuario, password, nombre, apellido, opcion, fecha, nCuenta]);
       
@@ -121,14 +124,12 @@ export class DbserviceService {
 
   // validar usuario en la base de datos
   async validarUsuario(usuario: string, password: string) {
-    console.log('entro a la funcion validar usuario');
+
     try {
       const res = await this.db.executeSql(`SELECT * FROM usuarios WHERE usuario = ? AND password = ?`, [usuario, password]);
       if (res.rows.length > 0) {//numero de filas que trae de la consulta que coincida, si hay 1 que consida
-        this.mostrarAlerta('validarUsuario','cantidad usuario: '+ res.rows.length);
-        this.mostrarAlerta('validarUsuarioMetodo','id:' +res.rows.item(0).id)
-
-        return res.rows.item(0).id; // retorna el primer usuario que coincida y su id
+        this.idOBt=res.rows.item(0).id
+        return this.idOBt; // retorna el primer usuario que coincida y su id
       } else {
         return null; // retorna nulo al no encontrar ningún usuario
       }
@@ -141,15 +142,16 @@ export class DbserviceService {
 
   
   //método para actualizar valores del usario y la tabla usuarios
-  async actualizarUsuario(id: number,usuario: string, password: string, nombre: string, apellido: string, opcion: string, fecha: string, nCuenta: string){
+  async actualizarUsuario(id: number,usuario: string, nombre: string, apellido: string, opcion: string, fecha: string, nCuenta: number){
     try {
       const update = await this.db.executeSql(
-        `UPDATE usuarios SET usuario = ?, password = ?, nombre = ?, apellido = ?, opcion = ?, fecha = ?, nCuenta = ? WHERE id = ? `,
-        [usuario, password, nombre, apellido, opcion, fecha, nCuenta,id]
+        `UPDATE usuarios SET usuario = ?, nombre = ?, apellido = ?, opcion = ?, fecha = ?, nCuenta = ? WHERE id = ? `,
+        [usuario, nombre, apellido, opcion, fecha, nCuenta,id]
       );
   
       if (update.rowsAffected > 0) {
-        console.log('Usuario actualizado correctamente.');
+        
+        this.router.navigate(['/menu/home']);
         return true; // Retorna true si la actualización fue correcta
       } else {
         console.log('Hubo un error al actualizar los datos del usuario.');
@@ -161,14 +163,45 @@ export class DbserviceService {
     }
   }
 
-
   //crear metodo para ingresar valores a la tabla nCuenta
-  async InsertarcuentaUsuario(nCuenta: string, saldo:number) {
+  async insertarCuentaUsuario(nCuenta: number, saldo: number) {
     try {
-      const insertCuenta = await this.db.executeSql(`INSERT INTO cuentaUsuario SET saldo = ? WHERE nCuenta = ?`, [this.saldo, nCuenta]);
-      if (insertCuenta.rows.length > 0) {
-        console.log('Cuenta de usuario encontrada');
-        return true;
+      const resultado = await this.db.executeSql(`
+        INSERT INTO cuentaUsuario (nCuenta, saldo) VALUES (?, ?)`, [nCuenta, saldo]);
+
+      if (resultado.rowsAffected > 0) {
+        
+        this.mostrarAlerta('actualizarcuentaUsuario','iiiiiiiiiiiiii');
+        for (let i = 0; i < resultado.rows.length; i++) {
+          const usuario = resultado.rows.item(i);
+
+          this.mostrarAlerta('actualizarcuentaUsuario', 'numero cuenta: ' +usuario.nCuenta+'n/saldo actual: '+usuario.saldo );
+        }
+        return resultado;
+      } else {
+        console.log('Error al insertar registro en cuentaUsuario');
+        return false;
+      }
+    } catch (error: any) {
+      console.error('Error al insertar en cuentaUsuario:', error.message);
+      throw error;
+    }
+  }
+
+
+
+  //actualizar metodo para ingresar valores a la tabla nCuenta
+  async actualizarcuentaUsuario(nCuenta: number, saldo:number) {
+    try {
+      const insertCuenta = await this.db.executeSql(`UPDATE cuentaUsuario SET saldo = ? WHERE nCuenta = ?`, [saldo, nCuenta]);
+      if (insertCuenta.rowsAffected > 0) {
+        for (let i = 0; i < insertCuenta.rows.length; i++) {
+          const user = insertCuenta.rows.item(i);
+ 
+        }
+      
+        
+        return insertCuenta;
       } else {
         console.log('No se encontró ninguna cuenta con el número de cuenta proporcionado.');
         return false; // Retorna false si no se encontró la cuenta
@@ -179,8 +212,8 @@ export class DbserviceService {
       }
   }
   
-/*  // metodo que permite encontrar y actualizar la cuenta de usuario y su saldo
-  async cuentaUsuario(nCuenta: string, saldo:number) {
+  // metodo que permite encontrar y actualizar la cuenta de usuario y su saldo
+  async cuentaUsuario(nCuenta: number, saldo:number) {
     try {
       const updateCuenta = await this.db.executeSql(`UPDATE cuentaUsuario SET saldo = ? WHERE nCuenta = ?`, [saldo, nCuenta]);
       if (updateCuenta.rows.length > 0) {
@@ -194,22 +227,16 @@ export class DbserviceService {
         console.error('Error al encontrar nCuenta:', error.message);
         throw error; // Lanza el error para ser capturado por el componente
       }
-  }*/
+  }
 
   // trae los datos del usuario
-  async datosUsuario(id: string) {
+  async datosUsuario(id: number) {
     try {
       const dataUser = await this.db.executeSql(`SELECT * FROM usuarios WHERE id = ?`, [id]);
-      if (dataUser.rows.length > 0) {//numero de filas que trae de la consulta que coincida, si hay 1 que consida
-        this.mostrarAlerta('validarUsuarioMetodo','id:' 
-          +dataUser.rows.item(0).id
-          +dataUser.rows.item(1).usuario
-          +dataUser.rows.item(3).nombre
-          +dataUser.rows.item(4).apellido
-          +dataUser.rows.item(5).opcion
-          +dataUser.rows.item(6).fecha
-          +dataUser.rows.item(7).nCuenta
-        )
+ 
+      if (dataUser.rows && dataUser.rows.length > 0) {
+        // Iterar sobre los resultados y mostrar los valores
+        
 
         return dataUser; // retorna el primer usuario que coincida y su id
       } else {
@@ -218,6 +245,18 @@ export class DbserviceService {
       
     } catch (error:any) {
       await this.mostrarAlerta('Error', 'No se encontró al usuario: ' + error.message);
+      return null;
+    }
+  }
+
+  async getSalgo(nCuenta: number) {
+    try {
+      const getSalgo = await this.db.executeSql(`SELECT saldo FROM cuentaUsuario WHERE nCuenta = ?`, [nCuenta]);
+      const saldo = getSalgo.rows.item(0).saldo;
+
+     return saldo;
+    } catch (error:any) {
+      await this.mostrarAlerta('Error', 'No trae getSaldo: ' + error.message);
       return null;
     }
   }

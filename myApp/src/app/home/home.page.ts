@@ -15,11 +15,12 @@ export class HomePage implements OnInit {
   message = 'This modal example ';
   name = "";
   monto: number = 0;
+  cuenta: number = 0;
   
   usuario: any = '';
   password: any = '';
   nCuenta: any = '';
-  saldo: number = 0;
+  saldo: number;
   nombre: any = '';
   apellido: any = '';
   fecha: any = '';
@@ -29,27 +30,22 @@ export class HomePage implements OnInit {
 
   constructor( private activerouter: ActivatedRoute,private router: Router,  private modalController: ModalController,private dbService: DbserviceService,private alertController: AlertController) {
     // Asignamos valores
+    
     this.usuario = localStorage.getItem('usuario');
     this.password = localStorage.getItem('password');
-    this.nCuenta = localStorage.getItem('nombre');
+    this.nCuenta = localStorage.getItem('nCuenta');
     this.nombre = localStorage.getItem('nombre');
     this.apellido = localStorage.getItem('apellido');
     this.opcion = localStorage.getItem('opcion');
     this.fecha = localStorage.getItem('fecha');
     
     this.idUsuario =Number(localStorage.getItem('idUsuario')) ;
-    this.saldo = Number(localStorage.getItem('saldo')) || 0; // para convertir a número
-    try{
-      const data_user = this.dbService.datosUsuario(this.idUsuario);
-      if(data_user){
-        this.mostrarAlerta('validando resivir dataUser', 'datos '+data_user+' id: '+this.idUsuario);
-        }
-      } catch (error:any) {
-        this.mostrarAlerta('Error', 'Error en traer o el id o data_user'+error.message);
-        console.error(error);
-      }
+    this.traerSaldo();
+    this.saldo = Number(localStorage.getItem('saldo'))||0; // para convertir a número
+    
+    
     }
-
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit() {
   }
 
@@ -87,40 +83,86 @@ export class HomePage implements OnInit {
 
   openModalDepositarme() {
     //Verificar si el monto es un número válido
-    this.depositarme();
+
     console.log("se metido al metodo depositar");
 }
 
+
+
   depositarme() {
     if (this.monto <= 0) {
-      console.log("Monto inválido");
+      this.mostrarAlerta('Error','El monto debe ser mayor a cero');
       return;
     } else {
       this.saldo += this.monto;
-      console.log("va a enviar el nuevo saldo");
-      console.log(this.saldo);
       this.modalController.dismiss(this.monto, 'confirm');
-      this.actualizarLocalStorage();
-      console.log("Datos actualizados:", this.usuario, this.nCuenta, this.saldo, this.nombre, this.apellido, this.opcion, this.fecha, this.monto);
+      this.actualizarCuentaSaldo(this.nCuenta,this.saldo);
       this.router.navigate(['/menu/home']);
     }
   }
-  actualizarLocalStorage() {
-    localStorage.setItem('usuario', this.usuario);
-    localStorage.setItem('password', this.password);
-    localStorage.setItem('nCuenta', this.nCuenta);
-    localStorage.setItem('saldo', this.saldo.toString());
-    localStorage.setItem('nombre', this.nombre);
-    localStorage.setItem('apellido', this.apellido);
-    localStorage.setItem('opcion', this.opcion);
-    localStorage.setItem('fecha', this.fecha);
-    localStorage.setItem('monto', this.monto.toString());
-    localStorage.setItem('idUsuario', this.idUsuario.toString());
+  async actualizarCuentaSaldo(nCuenta: number, saldo:number) {
+    try {
+      const Actu_cuentaUsuario = await this.dbService.actualizarcuentaUsuario(nCuenta, saldo);
+      
+      if (Actu_cuentaUsuario.rows && Actu_cuentaUsuario.rows.length > 0) {
+        for (let i = 0; i < Actu_cuentaUsuario.rows.length; i++) {
+          const user = Actu_cuentaUsuario.rows.item(i);
+          localStorage.setItem('nCuenta', user.nCuenta);
+          localStorage.setItem('saldo', user.saldo);
+          
+          this.mostrarAlerta('for', 'numero cuenta: ' +user.nCuenta+'n/saldo actual: '+user.saldo );
+        }
+      }
+    } catch (error: any) {
+      this.mostrarAlerta('Error', 'Error al actualizar saldo de la cuenta usuario ' + error.message);
+    }
   }
 
-  openModalDepositar() {
-   
+  async traerSaldo(){
+    try{
+      const saldoGet = await this.dbService.getSalgo(this.nCuenta);
+      if(saldoGet){
+        this.saldo= saldoGet;
+        localStorage.setItem('saldo', this.saldo.toString());
+      }
+
+    }catch (error: any) {
+      this.mostrarAlerta('Error', 'Error al traer cuenta usuario ' + error.message);
+    }
   }
+
+  async depositaATercero() {
+   if(this.monto < 0 && this.cuenta <0){//que los datos sean ingresados
+    this.mostrarAlerta('Error','Debe ingresar una cuenta y monto valido monto:'+this.monto+'cuenta: '+this.cuenta)
+    return null;
+
+   }else{
+    //comprobar que el monto a transferir sea mayor que el saldo
+    if(this.monto <= this.saldo){//que el monto sea menor que el saldo
+      this.mostrarAlerta('comprovar',' monto:'+this.monto+'cuenta: '+this.cuenta+'this.nCuenta'+this.nCuenta+'saldo'+this.saldo)
+      
+      try{
+      const comprobar = await this.dbService.getSalgo(this.cuenta);//trae el saldo de la cuenta si encuentra la cuenta encuentra
+      if(!comprobar){
+        const queTrae = comprobar.rows.item(0).saldo;
+        this.mostrarAlerta('Error',' no se encontro la cuenta'+ queTrae)
+        return null;
+      }else{
+        const queTrae = comprobar.rows.item(0).saldo;
+        this.mostrarAlerta('Error',' no se encontro la cuenta'+ queTrae)
+        //cuentaUsuario
+        return true;
+      }
+      }catch(error: any) {
+          this.mostrarAlerta('Error', 'Error al traer cuenta usuario para depositar terceros ' + error.message);
+          return null;
+      }
+    
+    }
+   }
+   return false;
+  }
+
   mandarDatosHistorial() {
    
   }

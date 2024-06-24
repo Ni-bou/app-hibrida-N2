@@ -11,7 +11,7 @@ import { DbserviceService } from '../dbservice.service';
 export class RegistrarsePage implements OnInit {
   usuario: string = '';
   password: string = '';
-  nCuenta:string = '';
+  nCuenta: number = 0;
   saldo: number = 0;
   nombre:string = '';
   apellido:string = '';
@@ -42,7 +42,7 @@ export class RegistrarsePage implements OnInit {
 
   async registrarse(){
         // Verifica si alguno de los campos está vacío
-        if (!this.usuario.trim() || !this.password.trim()||!this.nombre.trim() || !this.apellido.trim()) {
+        if (!this.usuario.trim() || !this.password.trim()||!this.nombre.trim() || !this.apellido.trim()||this.nCuenta < 0) {
           this.mostrarAlerta("Error", "Por favor completa todos los campos");
           return; // Detiene la ejecución si hay algún campo vacío y manda un mensaje
         }else{
@@ -58,19 +58,28 @@ export class RegistrarsePage implements OnInit {
               this.id = success;
               this.mostrarAlerta('Éxito', 'Usuario registrado correctamente'+success);
               //aquí  guardamos los valores en el localStorage de usuario y passwod
-          
               localStorage.setItem('usuario',this.usuario);
               localStorage.setItem('password',this.password);
-              localStorage.setItem('nCuenta', this.nCuenta);
+              localStorage.setItem('nCuenta', this.nCuenta.toString());
               localStorage.setItem('nombre', this.nombre);
               localStorage.setItem('apellido', this.apellido);
               localStorage.setItem('opcion', this.opcion);
               localStorage.setItem('fecha', this.fecha);
               localStorage.setItem('id',this.id.toString());//para guardar el id del usuario
+              //insertamos usuario en la segunda tabla
+
+              const insertCuenta = await this.dbService.insertarCuentaUsuario(this.nCuenta,this.saldo);
+              if(insertCuenta.rowsAffected > 0){
+                
+                localStorage.setItem('saldo', this.saldo.toString());
+
+              }else{
+                this.mostrarAlerta('Error','la cuenta ya existe');
+              }
 
               this.router.navigate(['/menu/home']); // Redirige a la página del menú si la inserción fue exitosa
             } else {
-              this.mostrarAlerta('Error', 'Hubo un error al registrar el usuario');
+              
               console.log('Hubo un error al registrar el usuario.');
             }
           } catch (error: any) {

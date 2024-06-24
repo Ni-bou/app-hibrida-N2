@@ -55,6 +55,11 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'menu/apimeteo-source',
+    redirectTo: 'menu/apimeteo-source',
+    pathMatch: 'full'
+  },
+  {
     path: '**',
     redirectTo: 'e404',
     pathMatch: 'full'
@@ -79,6 +84,8 @@ const routes: Routes = [
     path: 'e404',
     loadChildren: () => import('./e404/e404.module').then( m => m.E404PageModule)
   },
+ 
+
 
   
 

@@ -34,6 +34,10 @@ const routes: Routes = [
         loadChildren: () => import('../camera/camera.module').then( m => m.CameraPageModule)
       },
       {
+        path: 'apimeteo-source',
+        loadChildren: () => import('../apimeteo-source/apimeteo-source.module').then( m =>m.APImeteoSourcePageModule)
+      },
+      {
         path: '',
         redirectTo: 'home',                  
         pathMatch: 'full'

@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>apiFeriado</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">apiFeriado</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+  
+    <ion-card *ngFor="let feriado of feriados">
+    <ion-card-header>
+      <ion-card-title> {{feriado.nombre}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      
+      <p><strong>Tipo: </strong>{{feriado.tipo}}</p>
+      <p><strong>Fecha: </strong>{{feriado.fecha}}</p>
+      
+      <!--<p><strong>Leyes: </strong>{{item.leyes}}</p>-->
+    </ion-card-content>
+    
+    </ion-card>
+  </ion-list>
+</ion-content>

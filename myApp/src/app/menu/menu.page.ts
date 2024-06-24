@@ -38,46 +38,47 @@ export class MenuPage {
   navigateToHome() {
     
     this.router.navigate(['/menu/home']);
-    console.log("envia datos a la visual home");
-    this.mostrarAlerta("viajando", "Viaja informacion de menu al home");
+
   }
 
   navigateToPerfil() {
-    console.log("entro a navigateToPerfil()");
   
     this.router.navigate(['/menu/perfil']);
-    
-    console.log("envia datos a la visual perfil");
   }
 
   navigateToHistorial() {
-    
+  
     this.router.navigate(['/menu/historial']);
-    console.log("envia datos a la visual historial");
+
   }
 
   navigateToMap() {
     
     this.router.navigate(['/menu/map']);
-    console.log("envia datos a la visual historial");
+
   }
 
   navigateToApiEconomia() {
     
     this.router.navigate(['/menu/api-economia']);
-    console.log("envia datos a la visual historial");
+
   }
 
   navigateToCamera() {
     
     this.router.navigate(['/menu/camera']);
-    console.log("envia datos a la visual historial");
+
+  }
+  navigateToMeteo() {
+    
+    this.router.navigate(['/menu/apimeteo-source']);
+
   }
 
 
   //llama a la funcion removerItems para reutilizar codigo
   Salir(){
-    console.log("Salir del programa");
+
     this.removerItems();
     this.router.navigate(['/login']);
 
@@ -86,7 +87,6 @@ export class MenuPage {
   removerItems(){
     localStorage.removeItem('usuario');
     localStorage.removeItem('password');
-    localStorage.removeItem('saldo');
     localStorage.removeItem('nombre');
     localStorage.removeItem('apellido');
     localStorage.removeItem('fecha');
