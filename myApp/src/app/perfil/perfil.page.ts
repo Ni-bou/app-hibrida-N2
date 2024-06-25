@@ -64,7 +64,7 @@ export class PerfilPage implements OnInit {
 
   mostrarDatos() {
     // Método para mostrar los datos ingresados
-    if (!this.nombre.trim() || !this.apellido.trim() || this.nCuenta <= 0 || isNaN(this.nCuenta)) {
+    if (!this.nombre.trim() || !this.apellido.trim()) {
       this.mostrarAlerta("Error", "Por favor completa todos los campos");
     } else {
       const mensaje = `Nombre: ${this.nombre}\n Apellido: ${this.apellido}\n Opción: ${this.opcion}\n Fecha: ${this.fecha}\n N Cuenta: ${this.nCuenta}`;
@@ -75,37 +75,26 @@ export class PerfilPage implements OnInit {
   async enviarDatosAHome() {
     // Método para enviar datos actualizados a la página de inicio
 
-    if (!this.nombre.trim() || !this.apellido.trim() || this.nCuenta <= 0) {
+    if (!this.nombre.trim() || !this.apellido.trim() ) {
       this.mostrarAlerta("Error", "Por favor completa todos los campos obligatorios");
     } else {
       try {
         const actualizar = await this.dbService.actualizarUsuario(this.idUsuario, this.usuario, this.nombre, this.apellido, this.opcion, this.fecha, this.nCuenta);
         if (actualizar == true) {
-          this.mostrarAlerta('actualización!', 'El usuario fue actualizado exitosamente ' + actualizar);
-          localStorage.setItem('usuario', this.usuario);
-          localStorage.setItem('nCuenta', this.nCuenta.toString());
-          localStorage.setItem('saldo', this.saldo.toString());
-          localStorage.setItem('nombre', this.nombre);
-          localStorage.setItem('apellido', this.apellido);
-          localStorage.setItem('opcion', this.opcion);
-          localStorage.setItem('fecha', this.fecha);
-          localStorage.setItem('idUsuario', this.idUsuario.toString());
+          this.mostrarAlerta('actualización!', 'El usuario fue actualizado exitosamente ');
 
-          try {
-            const insert = await this.dbService.insertarCuentaUsuario(this.nCuenta, this.saldo);
-            this.mostrarAlerta('for', 'vueltas datos entrada:  ' +this.nCuenta+this.saldo );
-            if (insert.rows && insert.rows.length > 0) {
-              for (let i = 0; i < insert.rows.length; i++) {
-                const user = insert.rows.item(i);
-                localStorage.setItem('nCuenta', user.nCuenta);
-                localStorage.setItem('saldo', user.saldo);
-                this.mostrarAlerta('for', 'vueltas aaaaa' +user.nCuenta+user.saldo );
-              }
-            }
-          } catch (error: any) {
-            this.mostrarAlerta('Error', 'Error al actualizar cuenta usuario ' + error.message);
-          }
+            localStorage.setItem('usuario', this.usuario);
+            localStorage.setItem('nCuenta', this.nCuenta.toString());
+            localStorage.setItem('saldo', this.saldo.toString());
+            localStorage.setItem('nombre', this.nombre);
+            localStorage.setItem('apellido', this.apellido);
+            localStorage.setItem('opcion', this.opcion);
+            localStorage.setItem('fecha', this.fecha);
+            localStorage.setItem('idUsuario', this.idUsuario.toString());
+          
           this.router.navigate(['/menu/home']);
+        }else{
+          this.mostrarAlerta('Error', 'Error al actualizar datos usuario ' );
         }
       } catch (error: any) {
         this.mostrarAlerta('Error', 'Error al actualizar datos usuario ' + error.message);

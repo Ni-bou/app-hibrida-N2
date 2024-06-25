@@ -56,7 +56,6 @@ export class RegistrarsePage implements OnInit {
 
             if (success) {
               this.id = success;
-              this.mostrarAlerta('Éxito', 'Usuario registrado correctamente'+success);
               //aquí  guardamos los valores en el localStorage de usuario y passwod
               localStorage.setItem('usuario',this.usuario);
               localStorage.setItem('password',this.password);

@@ -85,8 +85,8 @@ export class DbserviceService {
         .then((db: SQLiteObject) => {
           return db.executeSql(`
             CREATE TABLE IF NOT EXISTS cuentaUsuario (
-              nCuenta TEXT PRIMARY KEY,
-              saldo INTERGER
+              nCuenta  INTEGER PRIMARY KEY,
+              saldo INTEGER
             )
           `, [])
             .then(async () => {
@@ -108,7 +108,7 @@ export class DbserviceService {
       
       if (result.rowsAffected > 0) {
         const id = await this.db.executeSql(`SELECT id FROM usuarios WHERE usuario = ? AND password = ?`,[usuario, password]);
-         this.mostrarAlerta('Felicidades!', 'Usuario ingresado correctamente'+ id.message);
+
         return id; // Retorna true si la inserción fue exitosa
       } else {
         console.log('Hubo un error al ingresar el usuario.');
@@ -135,7 +135,7 @@ export class DbserviceService {
       }
       
     } catch (error:any) {
-      await this.mostrarAlerta('Error', 'No se encontró al usuario: ' + error.message);
+      await this.mostrarAlerta('Error', 'No se encontró al usuario: ');
       return null;
     }
   }
@@ -150,8 +150,6 @@ export class DbserviceService {
       );
   
       if (update.rowsAffected > 0) {
-        
-        this.router.navigate(['/menu/home']);
         return true; // Retorna true si la actualización fue correcta
       } else {
         console.log('Hubo un error al actualizar los datos del usuario.');
@@ -171,11 +169,8 @@ export class DbserviceService {
 
       if (resultado.rowsAffected > 0) {
         
-        this.mostrarAlerta('actualizarcuentaUsuario','iiiiiiiiiiiiii');
         for (let i = 0; i < resultado.rows.length; i++) {
           const usuario = resultado.rows.item(i);
-
-          this.mostrarAlerta('actualizarcuentaUsuario', 'numero cuenta: ' +usuario.nCuenta+'n/saldo actual: '+usuario.saldo );
         }
         return resultado;
       } else {

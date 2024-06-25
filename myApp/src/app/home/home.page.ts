@@ -64,7 +64,7 @@ export class HomePage implements OnInit {
   }
 
   confirm() {
-    this.modalController.dismiss(this.monto, 'confirm');
+    this.modalController.dismiss(null, 'confirm');
   }
 
   onWillDismissDepositarme(event: Event) {
@@ -144,7 +144,7 @@ export class HomePage implements OnInit {
       try{
       const comprobar = await this.dbService.getSalgo(this.cuenta);//trae el saldo de la cuenta si encuentra la cuenta encuentra
       if(!comprobar){
-        this.mostrarAlerta('Error',' no se encontro la cuenta al buscarla'+ comprobar)
+        this.mostrarAlerta('Error',' no se encontro la cuenta al buscarla')
         return null;
       }else{
         //trae el saldo y suma el monto, luego se llama al metodo cuentaUsuario que actualiza el saldo
@@ -154,9 +154,11 @@ export class HomePage implements OnInit {
         const usuarioResive = await this.dbService.actualizarcuentaUsuario(this.cuenta,saldoActual);
         if(usuarioResive){
           this.mostrarAlerta('Exito!',' Deposito realizado exitosamente');
+          this.monto=0;
+          this.cuenta=0;
           this.router.navigate(['/menu/home']);
         }else{
-          this.mostrarAlerta('Error',' no se encontro la cuenta'+ usuarioResive)
+          this.mostrarAlerta('Error',' no se encontro la cuenta')
         }
         return true;
       }
@@ -170,7 +172,6 @@ export class HomePage implements OnInit {
       return null;
     }
    }
-   return false;
   }
 
   mandarDatosHistorial() {
