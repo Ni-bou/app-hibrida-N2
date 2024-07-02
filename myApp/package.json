@@ -9,7 +9,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "e2e": "protractor ./e2e/protractor.conf.js"
   },
   "private": true,
   "dependencies": {
@@ -41,7 +42,7 @@
     "zone.js": "~0.14.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^17.0.0",
+    "@angular-devkit/build-angular": "^17.3.8",
     "@angular-eslint/builder": "^17.0.0",
     "@angular-eslint/eslint-plugin": "^17.0.0",
     "@angular-eslint/eslint-plugin-template": "^17.0.0",
@@ -66,7 +67,9 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.2.2"
+    "protractor": "^7.0.0",
+    "typescript": "~5.2.2",
+    "webdriver-manager": "^12.1.9"
   },
   "description": "An Ionic project"
 }

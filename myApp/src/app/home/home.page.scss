@@ -26,12 +26,11 @@
   text-decoration: none;
 }
 ion-content::part(background) {
-  background: #e8e3f1;
+  
+  background-image: url('/assets/icon/img/azul2.jpg'); 
 }
 
-ion-content::part(scroll) {
-  color: #fff;
-}
+
 #saldo-card{
   background-color: #e2dddd;
 }

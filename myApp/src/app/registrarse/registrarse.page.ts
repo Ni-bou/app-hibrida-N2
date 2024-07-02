@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute,Router,NavigationExtras} from '@angular/router';
+import {Router} from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { DbserviceService } from '../dbservice.service'; 
 
@@ -21,7 +21,7 @@ export class RegistrarsePage implements OnInit {
 
 
 
-  constructor(private activerouter: ActivatedRoute, private router: Router,private alertController: AlertController,private dbService: DbserviceService) {
+  constructor( private router: Router,private alertController: AlertController,private dbService: DbserviceService) {
   }
   
   ngOnInit() {

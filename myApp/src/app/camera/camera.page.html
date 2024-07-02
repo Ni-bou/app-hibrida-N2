@@ -12,7 +12,7 @@
   </ion-header>
 <ion-button expand="block" (click)="takePicture()">Tomar Foto</ion-button>
 
-<ion-card *ngI="photo">
+<ion-card *ngIf="photo">
   <ion-card-header>Capturar Foto</ion-card-header>
   <ion-card-content><img [src]="photo" *ngIf="photo" width="100%"></ion-card-content>
 </ion-card>

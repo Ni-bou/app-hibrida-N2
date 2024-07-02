@@ -25,12 +25,14 @@
   #container a {
     text-decoration: none;
   }
-  ion-content::part(background) {
-    background: #e8e3f1;
-  }
+  //ion-content::part(background) {
+    //background: #e8e3f1;
+  //}
   
   ion-content::part(scroll) {
     color: #fff;
+    //background-image: url(../../assets/icon/img/azul2.jpg); //ruta relativa
+    background-image: url('/assets/icon/img/azul2.jpg'); //ruta estatica mas facil de mantener en caso de cambios
   }
   ion-content {
     display: flex;
@@ -46,4 +48,7 @@
   ion-card {
     margin-top: 00px; /* Ajusta este valor según sea necesario */
   }
+ 
+  
+  
   
