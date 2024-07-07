@@ -47,9 +47,7 @@ export class RegistrarsePage implements OnInit {
           return; // Detiene la ejecución si hay algún campo vacío y manda un mensaje
         }else{
     
-          // Si los campos NO están vacíos, procede con la navegación
-          //ME FALTA! verificar que el usuario que quieran crear no exista
-          
+          // Si los campos NO están vacíos, procede con la navegación          
           //ingrersar datos a la base de datos: 
           try {
             const success = await this.dbService.insertarUsuario(this.usuario, this.password, this.nombre, this.apellido, this.opcion, this.fecha, this.nCuenta);
@@ -71,14 +69,14 @@ export class RegistrarsePage implements OnInit {
               if(insertCuenta.rowsAffected > 0){
                 
                 localStorage.setItem('saldo', this.saldo.toString());
+                this.router.navigate(['/menu/home']); // Redirige a la página del menú si la inserción fue exitosa
 
               }else{
                 this.mostrarAlerta('Error','la cuenta ya existe');
               }
 
-              this.router.navigate(['/menu/home']); // Redirige a la página del menú si la inserción fue exitosa
-            } else {
               
+            } else {
               console.log('Hubo un error al registrar el usuario.');
             }
           } catch (error: any) {

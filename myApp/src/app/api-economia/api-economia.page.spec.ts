@@ -17,7 +17,7 @@ describe('ApiEconomiaPage', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('deberia crear un componente', () => {
     expect(component).toBeTruthy();
   });
 });

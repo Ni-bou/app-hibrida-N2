@@ -20,7 +20,7 @@ export class APImeteoSourcePage implements OnInit {
   fetchFeriados() {
     this.http.get('https://api.boostr.cl/feriados/en.json').subscribe(
       (response: any) => {//es una variable de cualquier tipo la cual utilizaremos para traer "data":[] que contiene toda la informacion de la api
-        this.feriados = response.data; //esto hacer que resiva la informacion directamente
+        this.feriados = response.data; //esto hace que resiva la informacion directamente
         //luego en el html llamaremos a "let feriado of feriados" para llamar a datos como feriado.title
       },
       error => {

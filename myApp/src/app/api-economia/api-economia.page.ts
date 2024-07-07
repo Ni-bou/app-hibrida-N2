@@ -24,7 +24,7 @@ export class ApiEconomiaPage implements OnInit {
     this.http.get('https://mindicador.cl/api').subscribe((response: any)=>{
     //cuando la solicitud se cumpla por completo
     //this.mostrarAlerta('API','este trae la api: '+ response);
-
+  
     this.economisData= this.transformData(response);
   
   });
